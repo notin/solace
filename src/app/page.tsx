@@ -44,6 +44,17 @@ export default function Home() {
     setFilteredAdvocates(advocates);
   };
 
+  const onClickSort = (field: keyof Advocate) => {
+    const sorted = [...filteredAdvocates].sort((a, b) => {
+      const aVal = a[field] ?? "";
+      const bVal = b[field] ?? "";
+      if (aVal < bVal) return -1;
+      if (aVal > bVal) return 1;
+      return 0;
+    });
+    setFilteredAdvocates(sorted);
+  };
+
   return (
     <main style={{ margin: "24px" }}>
       <h1>Solace Advocates</h1>
@@ -56,18 +67,19 @@ export default function Home() {
         </p>
         <input style={{ border: "1px solid black" }} onChange={onChange} />
         <button onClick={onClick}>Reset Search</button>
+      
       </div>
       <br />
       <br />
       <table>
         <thead>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>City</th>
-          <th>Degree</th>
-          <th>Specialties</th>
-          <th>Years of Experience</th>
-          <th>Phone Number</th>
+          <th onClick={() => onClickSort("firstName")}>First Name</th>
+          <th onClick={() => onClickSort("lastName")}>Last Name</th>
+          <th onClick={() => onClickSort("city")}>City</th>
+          <th onClick={() => onClickSort("degree")}>Degree</th>
+          <th onClick={() => onClickSort("specialties")}>Specialties</th>
+          <th onClick={() => onClickSort("yearsOfExperience")}>Years of Experience</th>
+          <th onClick={() => onClickSort("phoneNumber")}>Phone Number</th>
         </thead>
         <tbody>
           {filteredAdvocates.map((advocate :Advocate) => {
