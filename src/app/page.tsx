@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Advocate } from "@/interfaces/Advocate";
+import { Advocate } from "../app/interfaces/Advocate";
 
 export default function Home() {
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
@@ -10,8 +10,8 @@ export default function Home() {
 
   async function getAdvocates(){
     let response = await axios("/api/advocates");
-    setAdvocates(response.data);
-    setFilteredAdvocates(response.data);
+    setAdvocates(response.data.data);
+    setFilteredAdvocates(response.data.data);
   }
 
   useEffect( () : void => {
@@ -70,16 +70,15 @@ export default function Home() {
           <th>Phone Number</th>
         </thead>
         <tbody>
-          {filteredAdvocates.map((advocate) => {
-            const id = advocate.id ? advocate.id : 1;
+          {filteredAdvocates.map((advocate :Advocate) => {
             return (
-              <tr key={id}>
+              <tr key ={advocate.id}>
                 <td>{advocate.firstName}</td>
                 <td>{advocate.lastName}</td>
                 <td>{advocate.city}</td>
                 <td>{advocate.degree}</td>
                 <td>
-                  {advocate.specialties.map((s) => (
+                  {advocate.specialties.map((s: string) => (
                     <div>{s}</div>
                   ))}
                 </td>
