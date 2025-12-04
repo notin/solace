@@ -1,25 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { Advocate } from "@/interfaces/Advocate";
 
 export default function Home() {
-  const [advocates, setAdvocates] = useState([]);
-  const [filteredAdvocates, setFilteredAdvocates] = useState([]);
+  const [advocates, setAdvocates] = useState<Advocate[]>([]);
+  const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
 
-  useEffect(() => {
+  async function getAdvocates(){
+    let response = await axios("/api/advocates");
+    setAdvocates(response.data);
+    setFilteredAdvocates(response.data);
+  }
+
+  useEffect( () : void => {
     console.log("fetching advocates...");
-    fetch("/api/advocates").then((response) => {
-      response.json().then((jsonResponse) => {
-        setAdvocates(jsonResponse.data);
-        setFilteredAdvocates(jsonResponse.data);
-      });
-    });
+    getAdvocates();
   }, []);
 
-  const onChange = (e) => {
+  const onChange = (e: any) => {
     const searchTerm = e.target.value;
 
-    document.getElementById("search-term").innerHTML = searchTerm;
+    // document.getElementById("search-term").innerHTML = searchTerm;
 
     console.log("filtering advocates...");
     const filteredAdvocates = advocates.filter((advocate) => {
@@ -29,7 +32,7 @@ export default function Home() {
         advocate.city.includes(searchTerm) ||
         advocate.degree.includes(searchTerm) ||
         advocate.specialties.includes(searchTerm) ||
-        advocate.yearsOfExperience.includes(searchTerm)
+        advocate.yearsOfExperience === parseInt(searchTerm)
       );
     });
 
@@ -68,8 +71,9 @@ export default function Home() {
         </thead>
         <tbody>
           {filteredAdvocates.map((advocate) => {
+            const id = advocate.id ? advocate.id : 1;
             return (
-              <tr>
+              <tr key={id}>
                 <td>{advocate.firstName}</td>
                 <td>{advocate.lastName}</td>
                 <td>{advocate.city}</td>
