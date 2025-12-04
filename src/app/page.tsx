@@ -51,7 +51,7 @@ export default function Home() {
     const ascending = sortField === field ? !sortAsc : true;
     setSortField(field);
     setSortAsc(ascending);
-    
+
     const sorted = [...filteredAdvocates].sort((a, b) => {
       const aVal = a[field] ?? "";
       const bVal = b[field] ?? "";
@@ -74,7 +74,7 @@ export default function Home() {
         </p>
         <input style={{ border: "1px solid black" }} onChange={onChange} />
         <button className={'p-5'} onClick={onClick}>Reset Search</button>
-      
+
       </div>
       <br />
       <br />

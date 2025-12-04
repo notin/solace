@@ -180,29 +180,12 @@ const runSeed = async () => {
   console.log("Connecting to database...");
 
   const sql = postgres(process.env.DATABASE_URL, { max: 1 });
+  const db = drizzle(sql);
 
-  console.log(`Processing ${advocateData.length} advocates...`);
+  console.log(`Inserting ${advocateData.length} advocates...`);
 
-  let inserted = 0;
-  let skipped = 0;
-
-  // Insert each advocate if not already exists
+  // Insert each advocate
   for (const advocate of advocateData) {
-    // Check if advocate already exists (by first_name, last_name, and phone_number)
-    const existing = await sql`
-      SELECT id FROM advocates 
-      WHERE first_name = ${advocate.firstName} 
-        AND last_name = ${advocate.lastName} 
-        AND phone_number = ${advocate.phoneNumber}
-      LIMIT 1
-    `;
-
-    if (existing.length > 0) {
-      console.log(`  Skipped: ${advocate.firstName} ${advocate.lastName} (already exists)`);
-      skipped++;
-      continue;
-    }
-
     await sql`
       INSERT INTO advocates (first_name, last_name, city, degree, payload, years_of_experience, phone_number)
       VALUES (
@@ -215,11 +198,7 @@ const runSeed = async () => {
         ${advocate.phoneNumber}
       )
     `;
-    console.log(`  Inserted: ${advocate.firstName} ${advocate.lastName}`);
-    inserted++;
   }
-
-  console.log(`\nSummary: ${inserted} inserted, ${skipped} skipped`);
 
   await sql.end();
 };
