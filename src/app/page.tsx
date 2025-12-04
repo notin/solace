@@ -7,6 +7,8 @@ import { Advocate } from "../app/interfaces/Advocate";
 export default function Home() {
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
   const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
+  const [sortField, setSortField] = useState<keyof Advocate | null>(null);
+  const [sortAsc, setSortAsc] = useState(true);
 
   async function getAdvocates(){
     let response = await axios("/api/advocates");
@@ -45,11 +47,16 @@ export default function Home() {
   };
 
   const onClickSort = (field: keyof Advocate) => {
+    console.log("sorting advocates...");
+    const ascending = sortField === field ? !sortAsc : true;
+    setSortField(field);
+    setSortAsc(ascending);
+    
     const sorted = [...filteredAdvocates].sort((a, b) => {
       const aVal = a[field] ?? "";
       const bVal = b[field] ?? "";
-      if (aVal < bVal) return -1;
-      if (aVal > bVal) return 1;
+      if (aVal < bVal) return ascending ? -1 : 1;
+      if (aVal > bVal) return ascending ? 1 : -1;
       return 0;
     });
     setFilteredAdvocates(sorted);
