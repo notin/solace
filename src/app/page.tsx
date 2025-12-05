@@ -73,20 +73,22 @@ export default function Home() {
           Searching for: <span id="search-term"></span>
         </p>
         <input style={{ border: "1px solid black" }} onChange={onChange} />
-        <button onClick={onClick}>Reset Search</button>
+        <button className={'p-5'} onClick={onClick}>Reset Search</button>
       
       </div>
       <br />
       <br />
       <table>
         <thead>
-          <th onClick={() => onClickSort("firstName")}>First Name</th>
-          <th onClick={() => onClickSort("lastName")}>Last Name</th>
-          <th onClick={() => onClickSort("city")}>City</th>
-          <th onClick={() => onClickSort("degree")}>Degree</th>
-          <th onClick={() => onClickSort("specialties")}>Specialties</th>
-          <th onClick={() => onClickSort("yearsOfExperience")}>Years of Experience</th>
-          <th onClick={() => onClickSort("phoneNumber")}>Phone Number</th>
+          <tr>
+            <th onClick={() => onClickSort("firstName")}>First Name</th>
+            <th onClick={() => onClickSort("lastName")}>Last Name</th>
+            <th onClick={() => onClickSort("city")}>City</th>
+            <th onClick={() => onClickSort("degree")}>Degree</th>
+            <th onClick={() => onClickSort("specialties")}>Specialties</th>
+            <th onClick={() => onClickSort("yearsOfExperience")}>Years of Experience</th>
+            <th onClick={() => onClickSort("phoneNumber")}>Phone Number</th>
+          </tr>
         </thead>
         <tbody>
           {filteredAdvocates.map((advocate :Advocate) => {
